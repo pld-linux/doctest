@@ -16,6 +16,7 @@ URL:		https://github.com/doctest/doctest
 BuildRequires:	cmake >= 3.0
 BuildRequires:	libstdc++-devel >= 6:4.7
 Requires:	libstdc++-devel >= 6:4.7
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -41,7 +42,9 @@ uruchamiania testów.
 %build
 install -d build
 cd build
+# use arch-independent LIBDIR for cmake files, so that package can be noarch
 %cmake .. \
+	-DCMAKE_INSTALL_LIBDIR=%{_datadir} \
 	%{!?with_tests:-DDOCTEST_WITH_TESTS=OFF}
 
 %{__make}
@@ -59,4 +62,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc CHANGELOG.md LICENSE.txt README.md doc/markdown/*.md
 %{_includedir}/doctest
-%{_libdir}/cmake/doctest
+%{_datadir}/cmake/doctest
